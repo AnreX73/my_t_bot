@@ -1,16 +1,19 @@
 import asyncio
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher, F
+from aiogram.filters import Command, CommandStart
+from aiogram.types import Message
 
-bot = Bot(token="")
+bot = Bot(token="", parse_mode="HTML")
 dp = Dispatcher()
 
 
-@dp.message()
-async def echo(message: types.Message):
-    await message.answer(f'{message.text} чё надо ?')
+@dp.message(CommandStart())
+async def start(massage: Message):
+    await massage.answer(f"Hello <b>{massage.from_user.first_name}</b>")
 
 
 async def main():
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 
